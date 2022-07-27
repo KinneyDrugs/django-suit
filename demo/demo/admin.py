@@ -1,18 +1,14 @@
-from django.conf import settings
 from django.conf.urls import url
-from django.contrib import admin
-from django.forms import ModelForm, Select, TextInput, NumberInput
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from django.forms import ModelForm, Select, TextInput, NumberInput
 from django.shortcuts import redirect
-from django_select2.forms import ModelSelect2Widget
-from suit import apps
 
+# from django_select2.forms import ModelSelect2Widget
+from suit import apps
 from suit.admin import RelatedFieldAdmin, get_related_field
 from suit.admin_filters import IsNullFieldListFilter
 from suit.sortables import SortableTabularInline, SortableModelAdmin, SortableStackedInline
 from suit.widgets import AutosizedTextarea, EnclosedInput
-from .widgets import Bootstrap4Select
 from .models import *
 from .views import *
 
@@ -207,11 +203,6 @@ class MovieInline(SortableStackedInline):
     }
 
 
-class CountrySelect2Widget(Bootstrap4Select, ModelSelect2Widget):
-    search_fields = [
-        'name__icontains',
-        'code__iexact',
-    ]
 
 
 class ColorInput(TextInput):
@@ -229,7 +220,6 @@ class ShowcaseForm(ModelForm):
             'html5_number': NumberInput,
             'html5_date': DateInput,
             'textfield': AutosizedTextarea,
-            'country2': CountrySelect2Widget()
         }
 
 
@@ -249,6 +239,7 @@ class ShowcaseAdmin(RelatedFieldAdmin):
     radio_fields = {"horizontal_choices": admin.HORIZONTAL,
                     'vertical_choices': admin.VERTICAL}
     raw_id_fields = ('raw_id_field',)
+    autocomplete_fields = ("country2",)
 
     # Optional: Use following to override short_description or admin_order_field if needed
     link_to_country__continent = get_related_field(

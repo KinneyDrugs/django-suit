@@ -1,4 +1,5 @@
 from os.path import dirname, join, abspath
+
 from django.template.loaders.filesystem import Loader as FilesystemLoader
 
 _cache = {}
@@ -15,7 +16,7 @@ class Loader(FilesystemLoader):
         The parent FilesystemLoader.load_template_source() will take care
         of the actual loading for us.
         """
-        if not ':' in template_name:
+        if not ":" in template_name:
             return []
         app_name, template_name = template_name.split(":", 1)
         template_dir = get_app_template_dir(app_name)
@@ -35,15 +36,16 @@ def get_app_template_dir(app_name):
     """
     from django.conf import settings
     from importlib import import_module
+
     if app_name in _cache:
         return _cache[app_name]
     template_dir = None
     for app in settings.INSTALLED_APPS:
-        if app.split('.')[-1] == app_name:
+        if app.split(".")[-1] == app_name:
             # Do not hide import errors; these should never happen at this point
             # anyway
             mod = import_module(app)
-            template_dir = join(abspath(dirname(mod.__file__)), 'templates')
+            template_dir = join(abspath(dirname(mod.__file__)), "templates")
             break
     _cache[app_name] = template_dir
     return template_dir
