@@ -35,3 +35,6 @@ def suit_conf_value(name, model_admin=None):
         else:
             config.reset_config_value(name)
     return suit_conf(name)
+
+def str_to_version(string):
+    return tuple([int(s) for s in string.split('.')])
